@@ -1,6 +1,5 @@
-import os
+import os,random
 import tkinter as tk
-import random
 from PIL import Image, ImageTk
 from playsound import playsound
 
@@ -44,17 +43,17 @@ class OutfitApp:
         return labelImg
 
     def btns(self):
-        topPrev = tk.Button(self.topFrame, text="Prev", command = self.prevTop, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white')
+        topPrev = tk.Button(self.topFrame, text="Prev", command = self.prevTop, padx=10,font=("Comic Sans MS",12), activebackground='purple', activeforeground='white')
         topPrev.pack(side = tk.LEFT)
-        topNext = tk.Button(self.topFrame, text="Next", command = self.nextTop , font=("Comic Sans MS",12), activebackground='purple', activeforeground='white')
+        topNext = tk.Button(self.topFrame, text="Next", command = self.nextTop , padx=10, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white')
         topNext.pack(side = tk.RIGHT)
 
-        bottomPrev = tk.Button(self.bottomFrame, text="Prev", command = self.prevBottom, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white' )
+        bottomPrev = tk.Button(self.bottomFrame, text="Prev", command = self.prevBottom, padx=10, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white' )
         bottomPrev.pack(side = tk.LEFT)
-        bottomNext = tk.Button(self.bottomFrame, text="Next", command = self.nextBottom, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white' )
+        bottomNext = tk.Button(self.bottomFrame, text="Next", command = self.nextBottom, padx=10, font=("Comic Sans MS",12), activebackground='purple', activeforeground='white' )
         bottomNext.pack(side = tk.RIGHT)
 
-        makeOutfit = tk.Button(self.topFrame, text = "Create Outfit", command = self.createOutfit, font=("Comic Sans MS",14), activebackground='purple', activeforeground='white', borderwidth=4)
+        makeOutfit = tk.Button(self.topFrame, text = "Create Outfit", command = self.createOutfit, font=("Comic Sans MS",14), padx=15, activebackground='purple', activeforeground='white')
         makeOutfit.pack(anchor = tk.CENTER)
 
     def btnNext(self, current, group, incr = True):
@@ -75,13 +74,7 @@ class OutfitApp:
         else:
             imgLabel = self.bottomLabel
             self.bottomPath = nextImg
-        self.update_photo(nextImg, imgLabel)
-
-    def createOutfit(self):
-        top = random.randint(0, len(self.topImg)-1)
-        bottom = random.randint(0, len(self.bottomImg)-1)
-        self.display_photo(self.topImg[top], self.topLabel)
-        self.display_photo(self.bottomImg[bottom], self.bottomLabel)
+        self.updatePhoto(nextImg, imgLabel)
     
     def nextTop(self):
         self.btnNext(self.topPath, self.topImg, incr = True)
@@ -92,13 +85,18 @@ class OutfitApp:
     def nextBottom(self):
         self.btnNext(self.bottomPath, self.bottomImg, incr = True)
 
-    def update_photo(self, imgPath, imgLabel):
+    def updatePhoto(self, imgPath, imgLabel):
         img = Image.open(imgPath)
         newImg = img.resize((200,200), Image.ANTIALIAS)
         tkImg = ImageTk.PhotoImage(newImg)
         imgLabel.configure(image = tkImg)
         imgLabel.image = tkImg
-    
+
+    def createOutfit(self):
+        top = random.randint(0, len(self.topImg)-1)
+        bottom = random.randint(0, len(self.bottomImg)-1)
+        self.updatePhoto(self.topImg[top], self.topLabel)
+        self.updatePhoto(self.bottomImg[bottom], self.bottomLabel)
 
 if __name__ == '__main__':
     root = tk.Tk()
